@@ -1,0 +1,29 @@
+{{user}}
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">TimeSheet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li>{{#navLink "/mainDashboard"}}Dashboard{{/navLink}}</li>
+                <li>{{#navLink "/attendance"}}Attendance{{/navLink}}</li>
+                <li>{{#navLink "/report"}}Report{{/navLink}}</li>
+                <li>{{#navLink "/onboarding"}}On-Boarding{{/navLink}}</li>
+                <li>{{#navLink "/offboarding"}}Off-Boarding{{/navLink}}</li>
+                <li>{{#navLink "/editdetails"}}Edit Details{{/navLink}}</li>
+                <li>{{#navLink "/aboutus"}}About Us{{/navLink}}</li>
+                <li>{{#navLink "/contactus"}}Contact Us{{/navLink}}</li>
+
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link">Welcome {{user.username}}</a></li>
+                <li class="nav-item"><a class="nav-link"><i class="fa fa-envelope-o" style="font-size:24px"></i></a></li>
+                <li class="nav-item"><a class="nav-link"><i class="fa fa-user-o" style="font-size:24px"></i> Smith, John</a></li>              
+                <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out" style="font-size:24px"></i></a></li>
+
+            </ul>
+        </div>
+    </nav>

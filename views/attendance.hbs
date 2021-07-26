@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TimeSheet</title>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+     <link rel="stylesheet" href="./css/utils.css" />
+</head>
+
+<body>
+    {{> mainHeader user}}
+
+    <div class="container">
+        <div class="row">
+            <main class="col-md-12 mt-3">
+
+                <h2>Attendance</h2>
+                <hr />
+                <form method="POST" action="/attendanceSetup">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Username:</label>
+                                    
+                                    <input class="form-control" name="Date" type="text" value={{user.username}}>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Start Time:</label>
+                                    <input class="form-control" name="start_date" type="datetime-local" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Break Time:</label>
+                                    <select id="breakTime" name="break_time" class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>End Time:</label>
+                                    <input class="form-control" name="end_date" type="datetime-local" />
+                                </div>
+                            </div>
+                        </div>
+                     </fieldset>
+                     <hr />
+                
+                    <input type="submit" class="btn btn-primary float-right" value="Submit" /><br /><br /><br />
+                </form>
+            </main>
+        </div>
+    </div>
+
+   {{> footer user}}
+</body>
+
+</html>

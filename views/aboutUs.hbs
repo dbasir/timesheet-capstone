@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TimeSheet</title>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="./css/utils.css" />
+</head>
+
+<body>
+    {{> mainHeader user}}
+
+    <div class="container">
+        <div class="row">
+            <main class="col-md-12 mt-3">
+
+                <h2>About Us</h2>
+                <p>Hello {{user.username}}</p>
+                <hr />
+                <ul>
+                    <li>Project Name: TimeSheet</li>
+                    <li>Group Name: Bug Riders</li>
+                </ul>
+                <ul>
+                    <b>Members:</b>
+                    <li>Chirag Dudheria</li>
+                    <li>Divya Basir</li>
+                    <li>Harsh Pankajkumar Patel</li>
+                    <li>Raj Pravinkumar Patel</li>
+                    <li>Tanishq Rattan</li>
+                </ul>
+            </main>
+        </div>
+    </div>
+
+   {{> footer user}}
+</body>
+
+</html>
