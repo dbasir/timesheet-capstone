@@ -197,47 +197,42 @@ app.post("/attendanceSetup", (req, res) => {
     console.log("Got here after saving "+Attendc.username);
     res.redirect("/");
 })
-app.get("/contactusSetup", (req, res) => {
-    var ContactUs = new ContactModel({
-        username: 'divya',
-        firstName: 'Divya', 
-        lastName: 'Basir', 
-        email: 'dbasir@myseneca.ca',  
-        contactNum: '6476661111',
-        query_message: 'error is coming in about us page- test'        
-    });
+// On-Boarding 
+app.post("/firstrunsetup", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const email = req.body.email;
+    const SIN = req.body.SIN;
+    const addressStreet = req.body.addressStreet;
+    const addressCity = req.body.addressCity;
+    const addressProvince = req.body.addressProvince;
+    const zip = req.body.zip;
+    const status = req.body.status;
+    const departmentID = req.body.departmentID;
+    const contactNum = req.body.contactNum;
+    const position = req.body.position;
+    const hire_date = req.body.hire_date;
+    const isAdmin = req.body.isAdmin;
 
-    console.log("Got here after creating user model");
-    ContactUs.save((err) => {
-        console.log("Error: " + err + ";");
-        if (err) {
-            console.log("There was an error creating : "+ContactUs.username+" " + err);
-        }
-        else {
-            console.log(ContactUs.username+" was created");
-        }
-    });
-    console.log("Got here after saving "+ContactUs.username);
-    res.redirect("/");
-})
-app.get("/firstrunsetup", (req, res) => {
     var Emp = new EmployeeModel({
-        username: 'harsh',
-        password: '1234',
-        firstName: 'Harsh',
-        lastName: 'Patel',
-        email: 'hppatel26@myseneca.ca',
-        SIN: '223886780',
-        addressStreet: 'Fernforest',
-        addressCity: 'North York',
-        addressProvince: 'Ontario',
-        zip: 'L6R2E6',
-        status: 'full-time',
-        departmentID: '1',
-        contactNum: '6476454456',
-        position: 'admin',
-        hire_date: '2020-02-12',
-        isAdmin: false
+        username: username,
+        password : password,
+        firstName : firstName,
+        lastName : lastName,
+        email : email,
+        SIN : SIN,
+        addressStreet : addressStreet,
+        addressCity :addressCity,
+        addressProvince : addressProvince,
+        zip : zip,
+        status : status,
+        departmentID : departmentID,
+        contactNum : contactNum,
+        position : position,
+        hire_date : hire_date,
+        isAdmin : isAdmin
     });
 
     console.log("Got here after creating user model");
@@ -250,7 +245,6 @@ app.get("/firstrunsetup", (req, res) => {
             console.log(Emp.firstName+" was created");
         }
     });
-    console.log("Got here after saving "+Emp.firstName);
     var maintbl = new MainTableModel({
         username: Emp.username,
         password: Emp.password,
@@ -284,6 +278,33 @@ app.get("/firstrunsetup", (req, res) => {
     });
     res.redirect("/");
 })
+//On-Boarding
+app.post("/contactusSetup", (req, res) => {
+    const username = req.body.username;
+    const email = req.body.email;
+    const contactNum = req.body.contactNum;
+    const query_message = req.body.query_message;
+    var ContactUs = new ContactModel({
+        username: username,
+        email: email,  
+        contactNum: contactNum,
+        query_message: query_message        
+    });
+
+    console.log("Got here after creating user model");
+    ContactUs.save((err) => {
+        console.log("Error: " + err + ";");
+        if (err) {
+            console.log("There was an error creating : "+ContactUs.username+" " + err);
+        }
+        else {
+            console.log(ContactUs.username+" was created");
+        }
+    });
+    console.log("Got here after saving "+ContactUs.username);
+    res.redirect("/");
+})
+
 // Secure Admin Pages
 app.get("/attendance", ensureLogin, (req, res) => { 
     res.render("attendance", { user: req.myCompanySession.user, layout:false })
@@ -311,6 +332,30 @@ app.post("/editdetails", ensureLogin, (req, res) => {
     const start_date = req.body.start_date;
     const break_time = req.body.break_time;
     const end_date = req.body.end_date;
+        EmployeeModel.updateOne(
+            {username: username},
+            {$set: {
+                start_date  : start_date,
+                break_time  : break_time,
+                end_date    : end_date
+    
+            }}
+        ).exec()
+        .then((err)=>{
+            if(err){
+                console.log("An error occured while editing details "+err );
+    
+            }
+            else{req.myCompanySession.user ={
+                username    : username,
+                start_date  : start_date,
+                break_time  : break_time,
+                end_date    : end_date
+                
+            }}
+            
+            res.redirect("/editDetails");
+        })
     MainTableModel.updateOne(
         {username: username},
         {$set: {
@@ -330,9 +375,26 @@ app.post("/editdetails", ensureLogin, (req, res) => {
             start_date  : start_date,
             break_time  : break_time,
             end_date    : end_date
+            
         }}
         
         res.redirect("/editDetails");
+    })
+    
+});
+app.post("/inactiveEmployee", ensureLogin, (req, res) => { 
+    const username = req.body.username;
+    const status = "inactive";
+    MainTableModel.updateOne(
+        {username: username},
+        {$set: {
+            status  : status
+
+        }}
+    ).exec()
+    .then((err)=>{
+        
+        res.redirect("/offboarding");
     })
     
 });
