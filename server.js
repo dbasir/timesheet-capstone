@@ -80,19 +80,6 @@ app.use(function (req, res, next) {
 });
 
 
-// Security for Role management
-/*
-const usr = {
-    username: "user",
-    password: "1234",
-}
-const adminUsr = {
-    username: "admin",
-    password: "1234",
-
-}
-*/
-
 // Routes
 app.get("/", (req, res) => { 
     res.render("login", { user: req.myCompanySession.user, layout:false })
@@ -285,25 +272,44 @@ app.post("/contactusSetup", (req, res) => {
     const email = req.body.email;
     const contactNum = req.body.contactNum;
     const query_message = req.body.query_message;
-    var ContactUs = new ContactModel({
-        username: username,
-        email: email,  
-        contactNum: contactNum,
-        query_message: query_message        
-    });
+    if(query_message === null || query_message === undefined||query_message===""||contactNum === null || contactNum === undefined||contactNum===""||username === null || username === undefined||username===""||email === null || email === undefined||email===""){
+        return res.render("contactUs", {user: req.myCompanySession.user, errorMsg: "**All fields are required!**", layout: false})
+       
+    }
+    EmployeeModel.findOne({ username: username })
+    .exec()
+    .then((usr)=>{
+        if (!usr){
+            res.render("contactUs", {errorMsg: "**User does not exist!**", user: req.myCompanySession.user, layout: false});
+        }
+        else{
+            var ContactUs = new ContactModel({
+                username: username,
+                email: email,  
+                contactNum: contactNum,
+                query_message: query_message        
+            });
+        
+            ContactUs.save((err) => {
+                console.log("Error: " + err + ";");
+                if (err) {
+                    console.log("There was an error creating : "+ContactUs.username+" " + err);
+                }
+                else {
+                    console.log(ContactUs.username+" was created");
+                }
+            });
+            console.log("Got here after saving "+ContactUs.username);
+            res.redirect("/contactUs");
 
-    console.log("Got here after creating user model");
-    ContactUs.save((err) => {
-        console.log("Error: " + err + ";");
-        if (err) {
-            console.log("There was an error creating : "+ContactUs.username+" " + err);
         }
-        else {
-            console.log(ContactUs.username+" was created");
-        }
-    });
-    console.log("Got here after saving "+ContactUs.username);
-    res.redirect("/");
+    })
+    .catch((err) => { console.log("An error occurred: ${err}" + err) });
+
+        
+
+    
+    
 })
 
 // Secure Admin Pages

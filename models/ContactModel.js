@@ -11,9 +11,7 @@ mongoose.Promise = require("bluebird");
 
 // user model
 const ContactSchema = new Schema ({
-    "username": {
-        type: String,
-        unique: true},
+    "username": String,
         "firstName":String,
         "lastName":String,
         "email":String,
