@@ -72,6 +72,10 @@ td {
 h4{
   color: red;
 }
+.errorMsg{
+  color: red;
+  font-size: 15px;
+}
 
 hr {
   background-color: white;

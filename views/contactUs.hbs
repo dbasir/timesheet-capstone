@@ -35,7 +35,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>User Name :</label>
-                                    <input class="form-control" name="username" id="username" type="text" required/>
+                                    <input class="form-control" name="username" id="username" type="text" required />
                                 </div>
                             </div>
 
@@ -44,13 +44,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Email:</label>
-                                    <input class="form-control" name="email" id="email" type="email" required/>
+                                    <input class="form-control" name="email" id="email" type="email" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Contact Number:</label>
-                                    <input class="form-control" name="contactNum" id="contactNum" type="tel" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required/>
+                                    <input class="form-control" name="contactNum" id="contactNum" type="tel"
+                                        placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
                                 </div>
                             </div>
                         </div>
@@ -58,7 +59,13 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Query:</label>
-                                    <input class="form-control" name="query_message" id="query_message" type="text" required/>
+                                    <input class="form-control" name="query_message" id="query_message" type="text"
+                                        required />
+                                    {{#if query_msg_errorMsg}}
+                                    <p  class="errorMsg">{{query_msg_errorMsg}}</p>
+                                    {{else}}
+                                    <p></p>
+                                    {{/if}}
                                 </div>
                             </div>
 

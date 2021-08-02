@@ -38,7 +38,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Start Time:</label>
-                                    <input class="form-control" name="start_date" type="datetime-local" />
+                                    <input class="form-control" name="start_date" type="datetime-local" required/>
+                                    {{#if start_date_errorMsg}}
+                                    <p class="errorMsg">{{start_date_errorMsg}}</p>
+                                    {{else}}
+                                    <p></p>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
@@ -46,19 +51,23 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Break Time:</label>
-                                    <select id="breakTime" name="break_time" class="form-control">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
+                                    <input class="form-control" name="break_time" type="number" required/>
+                                    {{#if break_errorMsg}}
+                                    <p class="errorMsg">{{break_errorMsg}}</p>
+                                    {{else}}
+                                    <p></p>
+                                    {{/if}}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>End Time:</label>
-                                    <input class="form-control" name="end_date" type="datetime-local" />
+                                    <input class="form-control" name="end_date" type="datetime-local" required/>
+                                    {{#if end_date_errorMsg}}
+                                    <p class="errorMsg">{{end_date_errorMsg}}</p>
+                                    {{else}}
+                                    <p></p>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>

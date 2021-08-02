@@ -1,8 +1,13 @@
 const isEmpty=require('./function');
 
-test('isEmpty()', () => {
-    result = isEmpty('');
-    expect(result).toBeTruthy();
-    result = isEmpty(' ');
-    expect(result).toBeFalsy();
+const checkIfEmpty=require('./function');
+
+
+  test('checkIfEmpty()', () => {
+    result = checkIfEmpty(' ');
+    // { valid: false, error: 'Must not be empty'}
+    expect(result).toEqual(false);
+    result = checkIfEmpty('John Doe');
+    expect(result).toEqual(true);
+
   });
