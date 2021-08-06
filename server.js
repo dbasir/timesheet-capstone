@@ -2,6 +2,7 @@
 /* Team Name - Bug Riders */
 var express = require("express");
 var app = express();
+var moment = require('moment');
 var HTTP_PORT = process.env.PORT || 8080;
 
 function OnHttpStart() {
@@ -136,7 +137,7 @@ app.post("/login", (req, res) => {
                         departmentID: usr.departmentID,
                         contactNum: usr.contactNum,
                         position: usr.position,
-                        hire_date: usr.hire_date,
+                        hire_date: moment(usr.hire_date).format('YYYY-MM-DD'),
                     };
                     if (usr.isAdmin) {
                         res.redirect("/admindashboard");
@@ -165,10 +166,10 @@ app.get("/logout", (req, res) => {
 
 // Secure Pages
 app.get("/mainDashboard", ensureLogin, (req, res) => {
-    res.render("mainDashboard", { user: req.myCompanySession.user, layout: false })
+    res.render("mainDashboard", { user: req.myCompanySession.user, layout: false, success: 'User Login Successful!!' })
 });
 app.get("/adminDashboard", ensureAdminLogin, (req, res) => {
-    res.render("adminDashboard", { user: req.myCompanySession.user, layout: false })
+    res.render("adminDashboard", { user: req.myCompanySession.user, layout: false, success: 'Admin Login Successful!!' })
 });
 app.get("/profile", ensureLogin, (req, res) => {
     res.render("profile", { user: req.myCompanySession.user, layout: false })
@@ -185,7 +186,7 @@ app.post("/attendanceSetup", (req, res) => {
     }
 
     var Attendc = new AttendanceModel({
-
+        
         username: username,
         start_date: start_date,
         end_date: end_date,
@@ -239,7 +240,7 @@ app.post("/firstrunsetup", (req, res) => {
         departmentID: departmentID,
         contactNum: contactNum,
         position: position,
-        hire_date: hire_date,
+        hire_date: moment(hire_date).format('YYYY-MM-DD'),
         isAdmin: isAdmin
     });
 
@@ -253,38 +254,9 @@ app.post("/firstrunsetup", (req, res) => {
             console.log(Emp.firstName + " was created");
         }
     });
-    var maintbl = new MainTableModel({
-        username: Emp.username,
-        password: Emp.password,
-        firstName: Emp.firstName,
-        lastName: Emp.lastName,
-        email: Emp.email,
-        SIN: Emp.SIN,
-        addressStreet: Emp.addressStreet,
-        addressCity: Emp.addressCity,
-        addressProvince: Emp.addressProvince,
-        zip: Emp.zip,
-        status: Emp.status,
-        departmentID: Emp.departmentID,
-        contactNum: Emp.contactNum,
-        position: Emp.position,
-        hire_date: Emp.hire_date,
-        isAdmin: Emp.isAdmin,
-        start_date: '2020-02-12',
-        end_date: '2020-02-12',
-        break_time: '1',
-    });
-    console.log("Got here after creating user model in main table");
-    maintbl.save((err) => {
-        console.log("Error: " + err + ";");
-        if (err) {
-            console.log("There was an error creating user in main table : " + maintbl.firstName + " " + err);
-        }
-        else {
-            console.log(maintbl.firstName + " was created in main table");
-        }
-    });
-    res.redirect("/");
+ 
+
+    res.redirect("/onboarding");
 })
 //On-Boarding
 app.post("/contactusSetup", (req, res) => {
@@ -352,7 +324,7 @@ app.get("/contactUs", ensureLogin, (req, res) => {
 });
 
 app.get("/onboarding", ensureLogin, (req, res) => {
-    res.render("onBoarding", { user: req.myCompanySession.user, layout: false })
+    res.render("onBoarding", { user: req.myCompanySession.user, layout: false, successfull:'Employee added successfully' })
 });
 
 app.get("/offboarding", ensureLogin, (req, res) => {
@@ -369,39 +341,44 @@ app.get("/editDetails/:id", ensureAdminLogin, (req,res) => {
         .exec()
         .then((att)=>{
             res.render("editDetails", {user: req.myCompanySession.user, att: att, layout: false})
-        .catch(()=>{});
+        .catch((err)=>{console.log("An error occurred: ${err}" + err);});
     });
 });
-app.post("/editDetails", ensureAdminLogin, (req,res) => {
-    const att = new AttendanceModel({
-        _id: req.body.id,
-        username: req.body.username,
-        start_date : req.body.start_date,
-        break_time : req.body.break_time,
-        end_date : req.body.end_date,
-    });
+app.post("/editdetails", ensureLogin, (req, res) => {
+    const _id = req.body.id;
+    const username = req.body.username;
+    const start_date = req.body.start_date;
+    const break_time = req.body.break_time;
+    const end_date = req.body.end_date;
+    AttendanceModel.updateOne(
+        { _id: _id },
+        {
+            $set: {
+                start_date: start_date,
+                break_time: break_time,
+                end_date: end_date
 
-    if (req.body.edit === "1") {
-        // editing
-        AttendanceModel.updateOne({_id: att._id},
-            { $set: {
-                username: att.username,
-                start_date: att.start_date,
-                break_time: att.break_time,
-                end_date: att.end_date
-            }}
-            ).exec().then((err)=>{
-                res.redirect("/report");
-            });
-           
-         //car.updateOne((err)=>{});
+            }
+        }
+    ).exec()
+        .then((err) => {
+            if (err) {
+                console.log("An error occured while editing details " + err);
 
-    } else { 
-        //adding
-        car.save((err)=>{
-            res.redirect("/report");
-        });
-    };
+            }
+            else {
+                req.myCompanySession.user = {
+                    username: username,
+                    start_date: start_date,
+                    break_time: break_time,
+                    end_date: end_date
+
+                }
+            }
+
+            res.redirect("/editDetails");
+        })
+
 
 });
 app.post("/inactiveEmployee", ensureLogin, (req, res) => {

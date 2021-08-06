@@ -24,38 +24,7 @@
             <main class="col-md-12 mt-3">
 
                 <h2>Report</h2>
-                <hr />
-                <form>
-                    <fieldset method="POST" action="/report">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>UserName:</label>
-                                    <input class="form-control" name="employeeID" type="text" required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Date From:</label>
-                                    <input class="form-control" name="date" type="date" required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Date To:</label>
-                                    <input class="form-control" name="date" type="date" required />
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <hr />
-
-                    <input type="submit" class="btn btn-primary float-right" value="Submit" /><br /><br /><br />
-                </form>
+          
                 <hr>
                 <h5>ALL DATA - </h5>
                 {{#if hasattendance}}
@@ -64,10 +33,11 @@
                         <tr>
                             <th>&nbsp;</th>
                             <th>ID</th>
+                            <th>UserName</th>
                             <th>Start Date Time</th>
                             <th>Start End Time</th>
                             <th>Break Time</th>
-                            <th>&nbsp;</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -75,10 +45,11 @@
                         <tr>
                             <td><a href="/editDetails/{{_id}}">Edit</a></td>
                             <td>{{@index}}</td>
+                            <td>{{username}}</td>
                             <td>{{start_date}}</td>
                             <td>{{end_date}}</td>
                             <td>{{break_time}}</td>
-                            <td><a href="/att/Delete/{{_id}}">Delete</a></td>
+                           
                         </tr>
                         {{else}}
                         <tr>
