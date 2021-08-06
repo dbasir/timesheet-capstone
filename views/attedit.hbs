@@ -26,12 +26,22 @@
                 <h2>Report</h2>
                 <hr />
                 <form>
-                    <fieldset method="POST" action="/report">
+                    <fieldset method="POST" action="/att/edit">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    {{#if att._id}}
+                                    <input type="hidden" class="form-control" value="{{att._id}}" name="ID"/>
+                                    <input type="hidden" class="form-control" name="edit" value="1"/>
+                                    <h4>Editing attendance ID: {{att._id}}</h4>
+                                    {{else}}
+                                    <h4>Adding a new attendance</h4>
+                                    <input type="hidden" class="form-control" name="edit" value="0"/>
+                                    <label class="fixedlabel">ID</label><input type="number" name="ID"></input><br>
+
+                                    {{/if}}
                                     <label>UserName:</label>
-                                    <input class="form-control" name="employeeID" type="text" required />
+                                    <input class="form-control" name="employeeID" type="text" required/>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +49,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Date From:</label>
-                                    <input class="form-control" name="date" type="date" required />
+                                    <input class="form-control" name="date" type="date" required/>
                                 </div>
                             </div>
                         </div>
@@ -47,57 +57,24 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Date To:</label>
-                                    <input class="form-control" name="date" type="date" required />
+                                    <input class="form-control" name="date" type="date" required/>
                                 </div>
                             </div>
                         </div>
-                    </fieldset>
-                    <hr />
-
+                     </fieldset>
+                     <hr />
+                
                     <input type="submit" class="btn btn-primary float-right" value="Submit" /><br /><br /><br />
                 </form>
                 <hr>
-                <h5>ALL DATA - </h5>
-                {{#if hasattendance}}
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>ID</th>
-                            <th>Start Date Time</th>
-                            <th>Start End Time</th>
-                            <th>Break Time</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each att}}
-                        <tr>
-                            <td><a href="/editDetails/{{_id}}">Edit</a></td>
-                            <td>{{@index}}</td>
-                            <td>{{start_date}}</td>
-                            <td>{{end_date}}</td>
-                            <td>{{break_time}}</td>
-                            <td><a href="/att/Delete/{{_id}}">Delete</a></td>
-                        </tr>
-                        {{else}}
-                        <tr>
-                            <td colspan="8">No data was found!</td>
-                        </tr>
-                        {{/each}}
-
-                    </tbody>
-
-                </table>
-
-                {{else}}
-                <p>No report data</p>
-
-                {{/if}}
+                
             </main>
         </div>
     </div>
-    {{> footer user}}
+{{> footer user}}
 </body>
 
 </html>
+
+
+   

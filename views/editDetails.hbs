@@ -26,18 +26,27 @@
                 <h2>Edit Details</h2>
                 <hr />
                 <form method="POST" action="/editdetails">
+                {{#if att._id}}
+                <input type="hidden" name="ID" value="{{att._id}}" />
+                <input type="hidden" name="edit" value="1"/>
+                <h4>Editing Employee ID: {{att._id}}</h4>
+            {{else}}
+                <h4>Adding a New Car</h4>
+                <input type="hidden" name="edit" value="0"/>
+                <label class="fixedlabel">ID</label><input type="number" name="ID" /><br/>
+            {{/if}}
                     <fieldset>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>User Name:</label>
-                                    <input class="form-control" name="username" type="text" required/>
+                                    <input class="form-control" name="username" type="text" required value={{att.username}}/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Start Time:</label>
-                                    <input class="form-control" name="start_date" type="datetime-local" required/>
+                                    <input class="form-control" name="start_date" type="datetime-local" required value={{att.start_date}}/>
                                 </div>
                             </div>
                         </div>
@@ -45,19 +54,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Break Time:</label>
-                                    <select id="breakTime" name="break_time" class="form-control" required>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
+                                    <input class="form-control" name="break_time" type="number" required value={{att.break_time}}/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>End Time:</label>
-                                    <input class="form-control" name="end_date" type="datetime-local" required/>
+                                    <input class="form-control" name="end_date" type="datetime-local" required value={{att.end_date}}/>
                                 </div>
                             </div>
                         </div>

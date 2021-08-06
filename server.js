@@ -84,7 +84,17 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get("/report", ensureAdminLogin, (req,res) => {
+   // alert("working");
+    
+    AttendanceModel.find()
+        .lean()
+        .exec()
+        .then((att) => {
 
+            res.render("report", {att: att, hasattendance: !!att.length, user: req.myCompanySession.user, layout: false })
+        })
+})
 // Routes
 app.get("/", (req, res) => {
     res.render("login", { user: req.myCompanySession.user, layout: false })
@@ -165,6 +175,7 @@ app.get("/profile", ensureLogin, (req, res) => {
 });
 
 app.post("/attendanceSetup", (req, res) => {
+    //isoString.split(/[T ]/i, 1)[0] // => '2019-01-01'
     const username = req.myCompanySession.user.username;
     const start_date = req.body.start_date;
     const break_time = req.body.break_time;
@@ -294,7 +305,6 @@ app.post("/contactusSetup", (req, res) => {
 
     }
    
-
     EmployeeModel.findOne({ username: username })
         .exec()
         .then((usr) => {
@@ -326,13 +336,7 @@ app.post("/contactusSetup", (req, res) => {
         .catch((err) => {
             console.log("An error occurred: ${err}" + err);
 
-
         });
-
-
-
-
-
 })
 
 // Secure Admin Pages
@@ -357,67 +361,47 @@ app.get("/offboarding", ensureLogin, (req, res) => {
 app.get("/editDetails", ensureLogin, (req, res) => {
     res.render("editDetails", { user: req.myCompanySession.user, layout: false })
 });
-app.post("/editdetails", ensureLogin, (req, res) => {
-    const username = req.body.username;
-    const start_date = req.body.start_date;
-    const break_time = req.body.break_time;
-    const end_date = req.body.end_date;
-    EmployeeModel.updateOne(
-        { username: username },
-        {
-            $set: {
-                start_date: start_date,
-                break_time: break_time,
-                end_date: end_date
+app.get("/editDetails/:id", ensureAdminLogin, (req,res) => {
+    const id = req.params.id;
 
-            }
-        }
-    ).exec()
-        .then((err) => {
-            if (err) {
-                console.log("An error occured while editing details " + err);
+    AttendanceModel.findOne({_id: id})
+        .lean()
+        .exec()
+        .then((att)=>{
+            res.render("editDetails", {user: req.myCompanySession.user, att: att, layout: false})
+        .catch(()=>{});
+    });
+});
+app.post("/editDetails", ensureAdminLogin, (req,res) => {
+    const att = new AttendanceModel({
+        _id: req.body.id,
+        username: req.body.username,
+        start_date : req.body.start_date,
+        break_time : req.body.break_time,
+        end_date : req.body.end_date,
+    });
 
-            }
-            else {
-                req.myCompanySession.user = {
-                    username: username,
-                    start_date: start_date,
-                    break_time: break_time,
-                    end_date: end_date
+    if (req.body.edit === "1") {
+        // editing
+        AttendanceModel.updateOne({_id: att._id},
+            { $set: {
+                username: att.username,
+                start_date: att.start_date,
+                break_time: att.break_time,
+                end_date: att.end_date
+            }}
+            ).exec().then((err)=>{
+                res.redirect("/report");
+            });
+           
+         //car.updateOne((err)=>{});
 
-                }
-            }
-
-            res.redirect("/editDetails");
-        })
-    MainTableModel.updateOne(
-        { username: username },
-        {
-            $set: {
-                start_date: start_date,
-                break_time: break_time,
-                end_date: end_date
-
-            }
-        }
-    ).exec()
-        .then((err) => {
-            if (err) {
-                console.log("An error occured while editing details " + err);
-
-            }
-            else {
-                req.myCompanySession.user = {
-                    username: username,
-                    start_date: start_date,
-                    break_time: break_time,
-                    end_date: end_date
-
-                }
-            }
-
-            res.redirect("/editDetails");
-        })
+    } else { 
+        //adding
+        car.save((err)=>{
+            res.redirect("/report");
+        });
+    };
 
 });
 app.post("/inactiveEmployee", ensureLogin, (req, res) => {
