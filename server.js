@@ -13,6 +13,8 @@ const isEmpty = require('./tests/function');
 const inRange = require('./tests/function');
 const isLength = require('./tests/validation');
 const checkIfEmpty = require('./tests/function');
+const forgetpasswordFunctions = require('./models/forgetpassword')
+const validateForgetPasswordForm = forgetpasswordFunctions.validateFormForEmpty;
 
 
 var bodyParser = require("body-parser");
@@ -36,7 +38,7 @@ app.set('view engine', '.hbs');
 const config = require("./js/config");
 const mongoose = require("mongoose");
 // database models
-const UserModel = require("./models/UserModel");
+
 
 
 // database connection
@@ -44,10 +46,8 @@ mongoose.connect(config.dbconn, { useNewUrlParser: true, useUnifiedTopology: tru
 
 // Sessions and Cookies for persistance
 const clientSessions = require("client-sessions");
-const userModel = require("./models/UserModel");
 const EmployeeModel = require("./models/EmployeeModel");
 const AttendanceModel = require("./models/AttendanceModel");
-const MainTableModel = require("./models/MainTableModel");
 const ContactModel = require("./models/ContactModel");
 app.use(clientSessions({
     cookieName: "myCompanySession",
@@ -103,6 +103,7 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("login", { user: req.myCompanySession.user, layout: false })
 });
+
 app.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -118,7 +119,13 @@ app.post("/login", (req, res) => {
         .then((usr) => {
             if (!usr) {
                 res.render("login", { errorMsg: "Login does not exist!", user: req.myCompanySession.user, layout: false });
-            } else {
+            } 
+            if(password != usr.password){
+                res.render("login", { errorMsg: "Password does not match!", user: req.myCompanySession.user, layout: false });
+
+            }
+            
+            else {
                 // means the user exists
                 if (password == usr.password) {
                     // successful login
@@ -161,7 +168,101 @@ app.get("/logout", (req, res) => {
     req.myCompanySession.reset();
     res.redirect("/");  // home page
 })
+//Forgot Password
+app.get("/forgetpassword", (req, res) => {
+    // res.render("forgetpassword", { user: req.myCompanySession.user, layout: false });
+    res.render("forgetpassword", {
+        user: req.myCompanySession.user,
+        layout: false,
+        username: "",
+        email: "",
+        password: "",
+        confirmpassword: ""
+    });
+});
 
+app.post("/forgetpassword", (req, res) => {
+    var errorCustom="";
+    var error = '';
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmpassword = req.body.confirmpassword;
+    const isValid = validateForgetPasswordForm(username, email, password, confirmpassword);
+
+    if (isValid.trim() === "valid") {
+        EmployeeModel.findOne({ username: username }).exec().then((usr) => {
+            if (!usr) {
+                errorCustom = 'User does not exists';
+                res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
+                    email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
+                    ,errorMsg: "User does not exists"
+                });
+            } else {
+                if (email === usr.email) {
+                    EmployeeModel.updateOne(
+                        { username: username },
+                        {
+                            $set: {
+                                password: password
+                            }
+                        }
+                    ).exec().then((err) => {
+                        if (!err) {
+                            res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
+                                email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
+                                ,errorMsg: "Some error occurred while updating the password"
+                            });
+                        }
+                        else {
+                            EmployeeModel.updateOne({ username: username }, {
+                                $set: {
+                                    password: password
+                                }
+                            }).exec().then((done) => {
+                                if (done) {
+                                    res.render("login", {user: req.myCompanySession.user,layout: false,successMsg: "Password updated successfully!! Go back to Login Page"});
+                                 }
+                                else{
+                                    res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
+                                        email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
+                                        ,errorMsg: "Some error occurred while updating the password"
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    
+                    res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
+                        email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
+                        ,errorMsg: "Please enter an email registered with this user"
+                    });
+                }
+            }
+        }).catch((err) => {
+            error = "Some error occurred while validating the user"
+            res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
+                email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
+                ,errorMsg: "Some error occurred while validating the user"
+            });
+        });
+      
+    }
+    else {
+        res.render("forgetpassword", {
+            user: req.myCompanySession.user,
+            layout: false,
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            confirmpassword: req.body.confirmpassword,
+            errorMsg: isValid
+        });
+    }
+});
+
+//Forgot Password
 
 
 // Secure Pages
@@ -384,7 +485,7 @@ app.post("/editdetails", ensureLogin, (req, res) => {
 app.post("/inactiveEmployee", ensureLogin, (req, res) => {
     const username = req.body.username;
     const status = "inactive";
-    MainTableModel.updateOne(
+    EmployeeModel.updateOne(
         { username: username },
         {
             $set: {
