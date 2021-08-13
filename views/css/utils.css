@@ -48,6 +48,9 @@ a.btn-danger:hover {
 table.table {
   color: white;
 }
+.tbl_css{
+  width: 0%;
+}
 
 
 h2,

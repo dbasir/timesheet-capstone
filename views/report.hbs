@@ -28,27 +28,27 @@
                 <hr>
                 <h5>ALL DATA - </h5>
                 {{#if hasattendance}}
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>ID</th>
-                            <th>UserName</th>
-                            <th>Start Date Time</th>
-                            <th>Start End Time</th>
-                            <th>Break Time</th>
+                <table border="1" class="table table-striped table-light" style="color:black">
+                    <thead class="thead-light">
+                        <tr >
+                            <th class="tbl_css">&nbsp;</th>
+                            <th class="tbl_css">ID</th>
+                            <th class="tbl_css">UserName</th>
+                            <th class="tbl_css">Start Date Time</th>
+                            <th class="tbl_css">Start End Time</th>
+                            <th class="tbl_css">Break Time</th>
                            
                         </tr>
                     </thead>
                     <tbody>
                         {{#each att}}
                         <tr>
-                            <td><a href="/editDetails/{{_id}}">Edit</a></td>
-                            <td>{{@index}}</td>
-                            <td>{{username}}</td>
-                            <td>{{start_date}}</td>
-                            <td>{{end_date}}</td>
-                            <td>{{break_time}}</td>
+                            <td class="tbl_css"><a href="/editDetails/{{_id}}">Edit</a></td>
+                            <td class="tbl_css">{{@index}}</td>
+                            <td class="tbl_css">{{username}}</td>
+                            <td class="tbl_css">{{start_date}}</td>
+                            <td class="tbl_css">{{end_date}}</td>
+                            <td class="tbl_css">{{break_time}}</td>
                            
                         </tr>
                         {{else}}

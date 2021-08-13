@@ -53,7 +53,7 @@ app.use(clientSessions({
     cookieName: "myCompanySession",
     secret: "cap805_week6_sessionKeyword",
     duration: 2 * 60 * 1000, // 2 minutes - life of cookie
-    activeDuration: 1000 * 60 // 1 minutes life of session
+    activeDuration: 1000 * 180 // 1 minutes life of session
 }));
 
 // Security for Role management
@@ -85,15 +85,15 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get("/report", ensureAdminLogin, (req,res) => {
-   // alert("working");
-    
+app.get("/report", ensureAdminLogin, (req, res) => {
+    // alert("working");
+
     AttendanceModel.find()
         .lean()
         .exec()
         .then((att) => {
 
-            res.render("report", {att: att, hasattendance: !!att.length, user: req.myCompanySession.user, layout: false })
+            res.render("report", { att: att, hasattendance: !!att.length, user: req.myCompanySession.user, layout: false })
         })
 })
 // Routes
@@ -119,12 +119,12 @@ app.post("/login", (req, res) => {
         .then((usr) => {
             if (!usr) {
                 res.render("login", { errorMsg: "Login does not exist!", user: req.myCompanySession.user, layout: false });
-            } 
-            if(password != usr.password){
+            }
+            if (password != usr.password) {
                 res.render("login", { errorMsg: "Password does not match!", user: req.myCompanySession.user, layout: false });
 
             }
-            
+
             else {
                 // means the user exists
                 if (password == usr.password) {
@@ -182,7 +182,7 @@ app.get("/forgetpassword", (req, res) => {
 });
 
 app.post("/forgetpassword", (req, res) => {
-    var errorCustom="";
+    var errorCustom = "";
     var error = '';
     const username = req.body.username;
     const email = req.body.email;
@@ -194,9 +194,10 @@ app.post("/forgetpassword", (req, res) => {
         EmployeeModel.findOne({ username: username }).exec().then((usr) => {
             if (!usr) {
                 errorCustom = 'User does not exists';
-                res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
-                    email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
-                    ,errorMsg: "User does not exists"
+                res.render("forgetpassword", {
+                    user: req.myCompanySession.user, layout: false, username: req.body.username,
+                    email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                    , errorMsg: "User does not exists"
                 });
             } else {
                 if (email === usr.email) {
@@ -209,9 +210,10 @@ app.post("/forgetpassword", (req, res) => {
                         }
                     ).exec().then((err) => {
                         if (!err) {
-                            res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
-                                email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
-                                ,errorMsg: "Some error occurred while updating the password"
+                            res.render("forgetpassword", {
+                                user: req.myCompanySession.user, layout: false, username: req.body.username,
+                                email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                                , errorMsg: "Some error occurred while updating the password"
                             });
                         }
                         else {
@@ -221,33 +223,36 @@ app.post("/forgetpassword", (req, res) => {
                                 }
                             }).exec().then((done) => {
                                 if (done) {
-                                    res.render("login", {user: req.myCompanySession.user,layout: false,successMsg: "Password updated successfully!! Go back to Login Page"});
-                                 }
-                                else{
-                                    res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
-                                        email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
-                                        ,errorMsg: "Some error occurred while updating the password"
+                                    res.render("login", { user: req.myCompanySession.user, layout: false, successMsg: "Password updated successfully!! Go back to Login Page" });
+                                }
+                                else {
+                                    res.render("forgetpassword", {
+                                        user: req.myCompanySession.user, layout: false, username: req.body.username,
+                                        email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                                        , errorMsg: "Some error occurred while updating the password"
                                     });
                                 }
                             });
                         }
                     });
                 } else {
-                    
-                    res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
-                        email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
-                        ,errorMsg: "Please enter an email registered with this user"
+
+                    res.render("forgetpassword", {
+                        user: req.myCompanySession.user, layout: false, username: req.body.username,
+                        email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                        , errorMsg: "Please enter an email registered with this user"
                     });
                 }
             }
         }).catch((err) => {
             error = "Some error occurred while validating the user"
-            res.render("forgetpassword", {user: req.myCompanySession.user,layout: false,username: req.body.username,
-                email: req.body.email,password: req.body.password,confirmpassword: req.body.confirmpassword
-                ,errorMsg: "Some error occurred while validating the user"
+            res.render("forgetpassword", {
+                user: req.myCompanySession.user, layout: false, username: req.body.username,
+                email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                , errorMsg: "Some error occurred while validating the user"
             });
         });
-      
+
     }
     else {
         res.render("forgetpassword", {
@@ -287,7 +292,7 @@ app.post("/attendanceSetup", (req, res) => {
     }
 
     var Attendc = new AttendanceModel({
-        
+
         username: username,
         start_date: start_date,
         end_date: end_date,
@@ -355,7 +360,7 @@ app.post("/firstrunsetup", (req, res) => {
             console.log(Emp.firstName + " was created");
         }
     });
- 
+
 
     res.redirect("/onboarding");
 })
@@ -377,7 +382,7 @@ app.post("/contactusSetup", (req, res) => {
         return res.render("contactUs", { user: req.myCompanySession.user, errorMsg: "**All fields are required!**", layout: false })
 
     }
-   
+
     EmployeeModel.findOne({ username: username })
         .exec()
         .then((usr) => {
@@ -425,7 +430,7 @@ app.get("/contactUs", ensureLogin, (req, res) => {
 });
 
 app.get("/onboarding", ensureLogin, (req, res) => {
-    res.render("onBoarding", { user: req.myCompanySession.user, layout: false, successfull:'Employee added successfully' })
+    res.render("onBoarding", { user: req.myCompanySession.user, layout: false, successfull: 'Employee added successfully' })
 });
 
 app.get("/offboarding", ensureLogin, (req, res) => {
@@ -434,23 +439,27 @@ app.get("/offboarding", ensureLogin, (req, res) => {
 app.get("/editDetails", ensureLogin, (req, res) => {
     res.render("editDetails", { user: req.myCompanySession.user, layout: false })
 });
-app.get("/editDetails/:id", ensureAdminLogin, (req,res) => {
+app.get("/editDetails/:id", ensureAdminLogin, (req, res) => {
     const id = req.params.id;
 
-    AttendanceModel.findOne({_id: id})
+
+    AttendanceModel.findOne({ _id: id })
         .lean()
         .exec()
-        .then((att)=>{
-            res.render("editDetails", {user: req.myCompanySession.user, att: att, layout: false})
-        .catch((err)=>{console.log("An error occurred: ${err}" + err);});
-    });
+        .then((att) => {
+            console.log(att);
+            res.render("editDetails", { user: req.myCompanySession.user, att: att, layout: false })
+
+        }).
+        catch((err) => { console.log("An error occurred: ${err}" + err); });
 });
 app.post("/editdetails", ensureLogin, (req, res) => {
-    const _id = req.body.id;
+    const _id = req.body.ID;
     const username = req.body.username;
     const start_date = req.body.start_date;
     const break_time = req.body.break_time;
     const end_date = req.body.end_date;
+    console.log(_id);
     AttendanceModel.updateOne(
         { _id: _id },
         {
@@ -458,27 +467,19 @@ app.post("/editdetails", ensureLogin, (req, res) => {
                 start_date: start_date,
                 break_time: break_time,
                 end_date: end_date
-
             }
         }
     ).exec()
-        .then((err) => {
-            if (err) {
-                console.log("An error occured while editing details " + err);
-
-            }
-            else {
+        .then(() => {                       
                 req.myCompanySession.user = {
                     username: username,
                     start_date: start_date,
                     break_time: break_time,
                     end_date: end_date
-
-                }
-            }
-
+                }          
             res.redirect("/editDetails");
         })
+        .catch((err) => { console.log("An error occurred: ${err}" + err); });
 
 
 });
