@@ -362,7 +362,7 @@ app.post("/firstrunsetup", (req, res) => {
     });
 
 
-    res.redirect("/onboarding");
+    res.render("onboarding",{ user: req.myCompanySession.user, successmsg: "**Employee added successfully!!**", layout: false });
 })
 //On-Boarding
 app.post("/contactusSetup", (req, res) => {
