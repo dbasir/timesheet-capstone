@@ -304,14 +304,13 @@ app.post("/attendanceSetup", (req, res) => {
         console.log("Error: " + err + ";");
         if (err) {
             console.log("There was an error creating : " + Attendc.username + " " + err);
-            res.render("attendance",{ user: req.myCompanySession.user, errorMsg: "**Error: Attendance could not be added!!!**", layout: false });
         }
         else {
             console.log(Attendc.username + " was created");
         }
     });
     console.log("Got here after saving " + Attendc.username);
-    res.render("attendance",{ user: req.myCompanySession.user, successmsg: "**Attendance added succssfully!!!**", layout: false });
+    res.redirect("attendance");
 })
 // On-Boarding 
 app.post("/firstrunsetup", (req, res) => {
@@ -356,7 +355,6 @@ app.post("/firstrunsetup", (req, res) => {
         console.log("Error: " + err + ";");
         if (err) {
             console.log("There was an error creating : " + Emp.firstName + " " + err);
-            res.render("onboarding",{ user: req.myCompanySession.user, errorMsg: "**Error: Employee could not be added**", layout: false });
         }
         else {
             console.log(Emp.firstName + " was created");
@@ -364,7 +362,7 @@ app.post("/firstrunsetup", (req, res) => {
     });
 
 
-    res.render("onboarding",{ user: req.myCompanySession.user, successmsg: "**Employee added successfully!!**", layout: false });
+    res.redirect("/onboarding");
 })
 //On-Boarding
 app.post("/contactusSetup", (req, res) => {
@@ -461,7 +459,7 @@ app.post("/editdetails", ensureLogin, (req, res) => {
     const start_date = req.body.start_date;
     const break_time = req.body.break_time;
     const end_date = req.body.end_date;
-   
+    console.log(_id);
     AttendanceModel.updateOne(
         { _id: _id },
         {
@@ -479,10 +477,10 @@ app.post("/editdetails", ensureLogin, (req, res) => {
                 break_time: break_time,
                 end_date: end_date
             }
-            res.render("editDetails",{ user: req.myCompanySession.user, successmsg: "**Employee data updated successfully!!!**", layout: false });
+            res.redirect("/editDetails");
         })
         .catch((err) => { console.log("An error occurred: ${err}" + err); });
-        
+
 
 });
 app.post("/inactiveEmployee", ensureLogin, (req, res) => {
