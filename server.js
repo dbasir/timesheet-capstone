@@ -507,7 +507,7 @@ app.post("/inactiveEmployee", ensureLogin, (req, res) => {
             ).exec()
                 .then((username) => {
 
-                        res.render("offboarding", { user: req.myCompanySession.user, successmsg: "**Employee updated inactive**", layout: false });
+                        res.render("offBoarding", { user: req.myCompanySession.user, successmsg: "**Employee updated inactive**", layout: false });
                     
                 })
         }
