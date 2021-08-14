@@ -477,7 +477,7 @@ app.post("/editdetails", ensureLogin, (req, res) => {
                 break_time: break_time,
                 end_date: end_date
             }
-            res.render("editDetails",{ user: req.myCompanySession.user, successmsg: "**Employee updated inactive**", layout: false });
+            res.render("editDetails",{ user: req.myCompanySession.user, successmsg: "**Employee details updated**", layout: false });
         })
         .catch((err) => { console.log("An error occurred: ${err}" + err); });
 
