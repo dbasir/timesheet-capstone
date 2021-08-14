@@ -407,7 +407,7 @@ app.post("/contactusSetup", (req, res) => {
                     }
                 });
                 console.log("Got here after saving " + ContactUs.username);
-                res.render("/contactUs",{ user: req.myCompanySession.user, successmsg: "**Query message submitted successfully!!**", layout: false });
+                res.render("contactUs",{ user: req.myCompanySession.user, successmsg: "**Query message submitted successfully!!**", layout: false });
 
             }
         })
