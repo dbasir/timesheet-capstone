@@ -304,13 +304,14 @@ app.post("/attendanceSetup", (req, res) => {
         console.log("Error: " + err + ";");
         if (err) {
             console.log("There was an error creating : " + Attendc.username + " " + err);
+            res.render("attendance",{ user: req.myCompanySession.user, errorMsg: "**Error: Attendance could not be added!!!**", layout: false });
         }
         else {
             console.log(Attendc.username + " was created");
         }
     });
     console.log("Got here after saving " + Attendc.username);
-    res.redirect("attendance");
+    res.render("attendance",{ user: req.myCompanySession.user, successmsg: "**Attendance added succssfully!!!**", layout: false });
 })
 // On-Boarding 
 app.post("/firstrunsetup", (req, res) => {
@@ -355,6 +356,7 @@ app.post("/firstrunsetup", (req, res) => {
         console.log("Error: " + err + ";");
         if (err) {
             console.log("There was an error creating : " + Emp.firstName + " " + err);
+            res.render("onboarding",{ user: req.myCompanySession.user, errorMsg: "**Error: Employee could not be added**", layout: false });
         }
         else {
             console.log(Emp.firstName + " was created");
@@ -362,7 +364,7 @@ app.post("/firstrunsetup", (req, res) => {
     });
 
 
-    res.redirect("/onboarding");
+    res.render("onboarding",{ user: req.myCompanySession.user, successmsg: "**Employee added successfully!!**", layout: false });
 })
 //On-Boarding
 app.post("/contactusSetup", (req, res) => {
@@ -459,7 +461,7 @@ app.post("/editdetails", ensureLogin, (req, res) => {
     const start_date = req.body.start_date;
     const break_time = req.body.break_time;
     const end_date = req.body.end_date;
-    console.log(_id);
+   
     AttendanceModel.updateOne(
         { _id: _id },
         {
@@ -470,35 +472,56 @@ app.post("/editdetails", ensureLogin, (req, res) => {
             }
         }
     ).exec()
-        .then(() => {                       
-                req.myCompanySession.user = {
-                    username: username,
-                    start_date: start_date,
-                    break_time: break_time,
-                    end_date: end_date
-                }          
-            res.redirect("/editDetails");
+        .then(() => {
+            req.myCompanySession.user = {
+                username: username,
+                start_date: start_date,
+                break_time: break_time,
+                end_date: end_date
+            }
+            res.render("editDetails",{ user: req.myCompanySession.user, successmsg: "**Employee data updated successfully!!!**", layout: false });
         })
         .catch((err) => { console.log("An error occurred: ${err}" + err); });
-
+        
 
 });
 app.post("/inactiveEmployee", ensureLogin, (req, res) => {
     const username = req.body.username;
     const status = "inactive";
-    EmployeeModel.updateOne(
-        { username: username },
-        {
-            $set: {
-                status: status
+    EmployeeModel.findOne({ username: username }).exec().then((usr) => {
+        if (!usr) {
+            errorCustom = 'User does not exists';
+            res.render("offboarding", {
+                user: req.myCompanySession.user, layout: false, username: req.body.username,
+                email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+                , errorMsg: "User does not exists"
+            });
+        } 
+        else{
+            EmployeeModel.updateOne(
+                { username: username },
+                {
+                    $set: {
+                        status: status
+        
+                    }
+                }
+            ).exec()
+                .then((username) => {
 
-            }
+                        res.render("offboarding", { user: req.myCompanySession.user, successmsg: "**Employee updated inactive**", layout: false });
+                    
+                })
         }
-    ).exec()
-        .then((err) => {
-
-            res.redirect("/offboarding");
-        })
+    }).catch((err) => {
+        error = "Some error occurred while validating the user"
+        res.render("forgetpassword", {
+            user: req.myCompanySession.user, layout: false, username: req.body.username,
+            email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
+            , errorMsg: "Some error occurred while validating the user"
+        });
+    });
+    
 
 });
 app.get("/aboutus", ensureLogin, (req, res) => {

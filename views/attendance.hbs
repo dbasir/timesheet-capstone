@@ -25,6 +25,11 @@
 
                 <h2>Attendance</h2>
                 <hr />
+                {{#if successmsg}}
+                <h4>{{successmsg}}</h4>
+                {{else if errorMsg}}
+                <h4>{{errorMsg}}</h4>
+                {{/if}}
                 <form method="POST" action="/attendanceSetup">
                     <fieldset>
                         <div class="row">

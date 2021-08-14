@@ -26,16 +26,15 @@
 
                 <h2>On-Boarding</h2>
                 <hr />
+                {{#if successmsg}}
+                <h4>{{successmsg}}</h4>
+                {{else if errorMsg}}
+                <h4>{{errorMsg}}</h4>
+                {{/if}}
                 <form method="POST" action="/firstrunsetup">
-                    {{#if successful}}
-                    <div class="alert alert-success">
-                        <strong>Employee Added Successfully!</strong>
-                    </div>
-                    {{else}}
-                    
-                    {{/if}}
+
                     <fieldset>
-                        <di class="row">
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="username">User Name:</label>
@@ -49,129 +48,130 @@
                                         required />
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstName">First Name:</label>
+                                    <input class="form-control" id="firstName" name="firstName" type="text" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastName">Last Name:</label>
+                                    <input class="form-control" id="lastName" name="lastName" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input class="form-control" id="email" name="email" type="text" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="SIN">Social Security Number:</label>
+                                    <input class="form-control" id="SIN" name="SIN" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="addressStreet">Address (Street):</label>
+                                    <input class="form-control" id="addressStreet" name="addressStreet" type="text"
+                                        required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="addressCity">Address (City):</label>
+                                <input class="form-control" id="addressCity" name="addressCity" type="text" required />
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="addressProvince">Address (Province):</label>
+                                    <input class="form-control" id="addressProvince" name="addressProvince" type="text"
+                                        required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="zip">Address (Zip Code):</label>
+                                    <input class="form-control" id="zip" name="zip" type="text" required />
+                                </div>
+                            </div>
+                        </div>
 
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input class="form-control" id="firstName" name="firstName" type="text" required />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input class="form-control" id="lastName" name="lastName" type="text" required />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input class="form-control" id="email" name="email" type="text" required />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="SIN">Social Security Number:</label>
-                    <input class="form-control" id="SIN" name="SIN" type="text" required />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="addressStreet">Address (Street):</label>
-                    <input class="form-control" id="addressStreet" name="addressStreet" type="text" required />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label for="addressCity">Address (City):</label>
-                <input class="form-control" id="addressCity" name="addressCity" type="text" required />
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="addressProvince">Address (Province):</label>
-                    <input class="form-control" id="addressProvince" name="addressProvince" type="text" required />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="zip">Address (Zip Code):</label>
-                    <input class="form-control" id="zip" name="zip" type="text" required />
-                </div>
-            </div>
-        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Employee Status:</label><br />
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="status" name="status" value="active" required />
+                                        Active
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="status" name="status" value="inactive" required />
+                                        Inactive
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="departmentID">Department</label>
+                                    <select class="form-control" name="departmentID" id="departmentID" required>
+                                        <option value="1">Department 1</option>
+                                        <option value="2">Department 2</option>
+                                        <option value="3">Department 3</option>
+                                        <option value="4">Department 4</option>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Employee Status:</label><br />
-                    <label class="checkbox-inline">
-                        <input type="radio" id="status" name="status" value="active" required />
-                        Active
-                    </label>
-                    <label class="checkbox-inline">
-                        <input type="radio" id="status" name="status" value="inactive" required />
-                        Inactive
-                    </label>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="departmentID">Department</label>
-                    <select class="form-control" name="departmentID" id="departmentID" required>
-                        <option value="1">Department 1</option>
-                        <option value="2">Department 2</option>
-                        <option value="3">Department 3</option>
-                        <option value="4">Department 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="contactNum">Contact Number:</label>
+                                    <input class="form-control" id="contactNum" name="contactNum" type="tel"
+                                        placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="position">Position:</label>
+                                    <input class="form-control" id="position" name="position" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hire_date">Hire Date</label>
+                                    <input class="form-control" name="hire_date" id="hire_date" type="date" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>isAdmin:</label><br />
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="isAdmin" name="isAdmin" value="true" required />
+                                        Yes
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" id="isAdmin" name="isAdmin" value="false" required />
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
 
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="contactNum">Contact Number:</label>
-                    <input class="form-control" id="contactNum" name="contactNum" type="tel" placeholder="123-456-7890"
-                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="position">Position:</label>
-                    <input class="form-control" id="position" name="position" type="text" required />
-                </div>
-            </div>
+                    <hr />
+                    <input type="submit" class="btn btn-primary float-right" value="Submit" /><br /><br /><br />
+                </form>
+            </main>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="hire_date">Hire Date</label>
-                    <input class="form-control" name="hire_date" id="hire_date" type="date" required />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>isAdmin:</label><br />
-                    <label class="checkbox-inline">
-                        <input type="radio" id="isAdmin" name="isAdmin" value="true" required />
-                        Yes
-                    </label>
-                    <label class="checkbox-inline">
-                        <input type="radio" id="isAdmin" name="isAdmin" value="false" required />
-                        No
-                    </label>
-                </div>
-            </div>
-        </div>
-        </fieldset>
-
-        <hr />
-        <input type="submit" class="btn btn-primary float-right" value="Submit" /><br /><br /><br />
-        </form>
-        </main>
-    </div>
     </div>
 
     {{> footer user}}

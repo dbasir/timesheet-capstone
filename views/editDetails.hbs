@@ -28,10 +28,11 @@
                 <form method="POST" action="/editdetails">
                     <input type="hidden" name="ID" value="{{att._id}}" />
                     <input type="hidden" name="edit" value="1" />
-                    <h4>Editing Employee details with ID: {{att._id}}</h4>
-                    <div class="alert alert-success">
-                        <strong>{{success}}</strong>
-                    </div>
+                    {{#if successmsg}}
+                    <h4>{{successmsg}}</h4>
+                    {{else if errorMsg}}
+                    <h4>{{errorMsg}}</h4>
+                    {{/if}}
 
                     <fieldset>
                         <div class="row">
