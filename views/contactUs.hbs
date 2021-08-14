@@ -24,10 +24,10 @@
 
                 <h2>Contact Us</h2>
                 <hr />
-                {{#if errorMsg}}
+                {{#if successmsg}}
+                <h4>{{successmsg}}</h4>
+                {{else if errorMsg}}
                 <h4>{{errorMsg}}</h4>
-                {{else}}
-                <h4></h4>
                 {{/if}}
                 <form method="POST" action="/contactusSetup">
                     <fieldset>
