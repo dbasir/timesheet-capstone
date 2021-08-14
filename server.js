@@ -310,7 +310,7 @@ app.post("/attendanceSetup", (req, res) => {
         }
     });
     console.log("Got here after saving " + Attendc.username);
-    res.redirect("attendance");
+    res.render("attendance",{ user: req.myCompanySession.user, successmsg: "**Attendance details added**", layout: false });
 })
 // On-Boarding 
 app.post("/firstrunsetup", (req, res) => {
