@@ -362,7 +362,7 @@ app.post("/firstrunsetup", (req, res) => {
     });
 
 
-    res.render("onboarding",{ user: req.myCompanySession.user, successmsg: "**Employee added successfully!!**", layout: false });
+    res.render("onBoarding",{ user: req.myCompanySession.user, successmsg: "**Employee added successfully!!**", layout: false });
 })
 //On-Boarding
 app.post("/contactusSetup", (req, res) => {
@@ -489,7 +489,7 @@ app.post("/inactiveEmployee", ensureLogin, (req, res) => {
     EmployeeModel.findOne({ username: username }).exec().then((usr) => {
         if (!usr) {
             errorCustom = 'User does not exists';
-            res.render("offboarding", {
+            res.render("offBoarding", {
                 user: req.myCompanySession.user, layout: false, username: req.body.username,
                 email: req.body.email, password: req.body.password, confirmpassword: req.body.confirmpassword
                 , errorMsg: "User does not exists"
